@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using StayFinder.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,13 @@ builder.Services.AddCors(options =>
         b => b.AllowAnyHeader()
               .AllowAnyOrigin()
               .AllowAnyMethod());
+});
+
+//register DB connection
+var connectionString = builder.Configuration.GetConnectionString("StayFinderDbConnectionString");
+builder.Services.AddDbContext<StayFinderDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
 });
 
 //inject Serilog

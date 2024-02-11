@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public string ShortName { get; set; }
 
-        //one to one relationship  between hotels and country
+        //one to many relationship  between hotels and country
         public virtual IList<Hotel> Hotels { get; set; }
     }
 }
