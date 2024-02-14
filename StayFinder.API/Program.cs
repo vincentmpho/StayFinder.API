@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using StayFinder.API.Configaration;
 using StayFinder.API.Data;
+using StayFinder.API.Repository;
+using StayFinder.API.Repository.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,14 @@ builder.Services.AddCors(options =>
               .AllowAnyOrigin()
               .AllowAnyMethod());
 });
+
+//register autoMapper
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+//Register Repostiory
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+
 
 //register DB connection
 var connectionString = builder.Configuration.GetConnectionString("StayFinderDbConnectionString");
