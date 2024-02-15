@@ -29,6 +29,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 //Register Repostiory
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
 
 
 //register DB connection

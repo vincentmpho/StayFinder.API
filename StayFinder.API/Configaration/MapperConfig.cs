@@ -16,6 +16,7 @@ namespace StayFinder.API.Configaration
 
 
                 CreateMap<Hotel, HotelDto>().ReverseMap();
+                CreateMap<Hotel, CreateHotelDto>().ReverseMap();
         }
     }
 }
