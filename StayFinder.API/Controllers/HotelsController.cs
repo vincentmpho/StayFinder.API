@@ -27,7 +27,7 @@ namespace StayFinder.API.Controllers
         {
             var hotels = await _hotelsRepository.GetAllAsync();
             var records = _mapper.Map<List<HotelDto>>(hotels);
-            return Ok(records);
+            return StatusCode(StatusCodes.Status200OK, records);
         }
 
         [HttpGet("{id}")]
@@ -37,11 +37,11 @@ namespace StayFinder.API.Controllers
 
             if (hotel == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             var hotelDto = _mapper.Map<HotelDto>(hotel);
-            return Ok(hotelDto);
+            return StatusCode(StatusCodes.Status200OK, hotelDto);
         }
 
         [HttpPost]
@@ -58,19 +58,21 @@ namespace StayFinder.API.Controllers
         {
             if (id != hotelDto.Id)
             {
-                return BadRequest("Invalid Record Id");
+                
+                return StatusCode(StatusCodes.Status400BadRequest, "Invalid Record Id");
+
             }
 
             var existingHotel = await _hotelsRepository.GetAsync(id);
             if (existingHotel == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             _mapper.Map(hotelDto, existingHotel);
             await _hotelsRepository.UpdateAsync(existingHotel);
 
-            return NoContent();
+            return StatusCode(StatusCodes.Status204NoContent);
         }
 
         [HttpDelete("{id}")]
@@ -80,12 +82,12 @@ namespace StayFinder.API.Controllers
 
             if (hotel == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             await _hotelsRepository.DeleteAsync(id);
 
-            return NoContent();
+            return StatusCode(StatusCodes.Status204NoContent);
         }
     }
 }
