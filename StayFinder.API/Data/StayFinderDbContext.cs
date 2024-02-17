@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using StayFinder.API.Models;
 
 namespace StayFinder.API.Data
 {
-    public class StayFinderDbContext : DbContext
+    public class StayFinderDbContext : IdentityDbContext<ApiUser>
     {
         public StayFinderDbContext(DbContextOptions options) : base(options)
         {

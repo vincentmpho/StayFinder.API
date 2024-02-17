@@ -4,6 +4,8 @@ using StayFinder.API.Configaration;
 using StayFinder.API.Data;
 using StayFinder.API.Repository;
 using StayFinder.API.Repository.Interface;
+using Microsoft.AspNetCore.Identity;
+using StayFinder.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,12 @@ builder.Services.AddCors(options =>
               .AllowAnyOrigin()
               .AllowAnyMethod());
 });
+
+//register User Identity Core
+builder.Services.AddIdentityCore<ApiUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<StayFinderDbContext>();
+
 
 //register autoMapper
 builder.Services.AddAutoMapper(typeof(MapperConfig));
