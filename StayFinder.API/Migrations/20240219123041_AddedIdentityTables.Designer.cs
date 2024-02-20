@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StayFinder.API.Data;
 
@@ -11,9 +12,10 @@ using StayFinder.API.Data;
 namespace StayFinder.API.Migrations
 {
     [DbContext(typeof(StayFinderDbContext))]
-    partial class StayFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240219123041_AddedIdentityTables")]
+    partial class AddedIdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,22 +49,6 @@ namespace StayFinder.API.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a7169623-f380-496c-859a-5cab90e79941",
-                            ConcurrencyStamp = "6f8eaf6b-9a33-443e-b143-680bed1e1702",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "8539015e-353f-4c35-95a0-84a5da0f2087",
-                            ConcurrencyStamp = "1a20a9be-3829-4e4b-ac99-0120f1a6abd8",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -263,26 +249,6 @@ namespace StayFinder.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("countries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Jamica",
-                            ShortName = "JM"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "South Africa",
-                            ShortName = "SA"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "South Africa",
-                            ShortName = "SA"
-                        });
                 });
 
             modelBuilder.Entity("StayFinder.API.Models.Hotel", b =>
@@ -312,32 +278,6 @@ namespace StayFinder.API.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Hotels");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "Negril",
-                            CountryId = 1,
-                            Name = "Sandals Resort and Spa",
-                            Rating = 4.2000000000000002
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "Limpopo",
-                            CountryId = 3,
-                            Name = "Thaba Pitsi Nature Reserve and Spa",
-                            Rating = 5.0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Address = "Cape Town",
-                            CountryId = 2,
-                            Name = "Table Bay Hotel",
-                            Rating = 4.2000000000000002
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

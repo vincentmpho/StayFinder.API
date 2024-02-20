@@ -2,6 +2,7 @@
 using StayFinder.API.Models;
 using StayFinder.API.Models.DTOs.Country;
 using StayFinder.API.Models.DTOs.Hotel;
+using StayFinder.API.Models.DTOs.Users;
 
 namespace StayFinder.API.Configaration
 {
@@ -17,6 +18,9 @@ namespace StayFinder.API.Configaration
 
                 CreateMap<Hotel, HotelDto>().ReverseMap();
                 CreateMap<Hotel, CreateHotelDto>().ReverseMap();
+
+
+                CreateMap<ApiUserDto, ApiUser>().ReverseMap();
         }
     }
 }

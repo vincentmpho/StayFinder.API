@@ -4,24 +4,28 @@
 
 namespace StayFinder.API.Migrations
 {
-    public partial class SeededCountriesAndHotels : Migration
+    public partial class AddedDefaultRoles : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
-                table: "countries",
-                columns: new[] { "Id", "Name", "ShortName" },
-                values: new object[] { 1, "Jamica", "JM" });
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "8539015e-353f-4c35-95a0-84a5da0f2087", "1a20a9be-3829-4e4b-ac99-0120f1a6abd8", "User", "USER" },
+                    { "a7169623-f380-496c-859a-5cab90e79941", "6f8eaf6b-9a33-443e-b143-680bed1e1702", "Administrator", "ADMINISTRATOR" }
+                });
 
             migrationBuilder.InsertData(
                 table: "countries",
                 columns: new[] { "Id", "Name", "ShortName" },
-                values: new object[] { 2, "South Africa", "SA" });
-
-            migrationBuilder.InsertData(
-                table: "countries",
-                columns: new[] { "Id", "Name", "ShortName" },
-                values: new object[] { 3, "South Africa", "SA" });
+                values: new object[,]
+                {
+                    { 1, "Jamica", "JM" },
+                    { 2, "South Africa", "SA" },
+                    { 3, "South Africa", "SA" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Hotels",
@@ -41,6 +45,16 @@ namespace StayFinder.API.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DeleteData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: "8539015e-353f-4c35-95a0-84a5da0f2087");
+
+            migrationBuilder.DeleteData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: "a7169623-f380-496c-859a-5cab90e79941");
+
             migrationBuilder.DeleteData(
                 table: "Hotels",
                 keyColumn: "Id",

@@ -12,8 +12,8 @@ using StayFinder.API.Data;
 namespace StayFinder.API.Migrations
 {
     [DbContext(typeof(StayFinderDbContext))]
-    [Migration("20240217130825_AddedIdentityTables")]
-    partial class AddedIdentityTables
+    [Migration("20240219124913_AddedDefaultRoles")]
+    partial class AddedDefaultRoles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,22 @@ namespace StayFinder.API.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a7169623-f380-496c-859a-5cab90e79941",
+                            ConcurrencyStamp = "6f8eaf6b-9a33-443e-b143-680bed1e1702",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "8539015e-353f-4c35-95a0-84a5da0f2087",
+                            ConcurrencyStamp = "1a20a9be-3829-4e4b-ac99-0120f1a6abd8",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -6,6 +6,11 @@ using StayFinder.API.Repository;
 using StayFinder.API.Repository.Interface;
 using Microsoft.AspNetCore.Identity;
 using StayFinder.API.Models;
+using StayFinder.API.Services.Interface;
+using StayFinder.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +43,28 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
+
+//Register JWT
+builder.Services.AddAuthentication(options => { 
+   options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; //"Bearer"
+   options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}) .AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        ValidateAudience = true,
+        ClockSkew = TimeSpan.Zero,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+        .GetBytes(builder.Configuration["JwtSettings:Key"]))
+    };
+
+});
 
 
 //register DB connection
