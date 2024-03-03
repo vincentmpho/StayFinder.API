@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,6 +108,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+
 //register DB connection
 var connectionString = builder.Configuration.GetConnectionString("StayFinderDbConnectionString");
 builder.Services.AddDbContext<StayFinderDbContext>(options =>
@@ -118,6 +121,13 @@ builder.Host.UseSerilog((ctx, lc) => lc.WriteTo
 .Console()
 .ReadFrom.Configuration(ctx.Configuration));
 
+//inject Helath Service Checks
+builder.Services.AddHealthChecks()
+    .AddCheck<CustomHealthCheck>("Custom Health Check", failureStatus: HealthStatus.Degraded,
+    tags: new[] {"custom" }
+    
+    );
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -126,6 +136,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//Add Health check Middleware
+app.MapHealthChecks("/healthcheck", new HealthCheckOptions
+{ 
+    Predicate = healthcheck =>  healthcheck.Tags.Contains("custom")
+
+});
+
+app.MapHealthChecks("/healthcheck");
+
 //Add Serilog Request Logging
 app.UseSerilogRequestLogging();
 
@@ -134,7 +153,23 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
+
+
+class CustomHealthCheck : IHealthCheck
+{
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        var isHealthy = true;
+
+        /* custom checks. Logic.... etc.etc. */
+
+        if (isHealthy)
+        {
+            return Task.FromResult(HealthCheckResult.Healthy("All system are looking good"));
+        }
+        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, "System unhealthy"));
+    }
+}
