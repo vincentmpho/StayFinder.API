@@ -6,8 +6,8 @@ namespace StayFinder.API.Models.DTOs.Users
     {
         [Required]
         public string FirstName { get; set; }
-
         [Required]
         public string LastName { get; set; }
+
     }
 }

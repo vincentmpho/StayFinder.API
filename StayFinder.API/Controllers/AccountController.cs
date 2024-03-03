@@ -29,14 +29,13 @@ namespace StayFinder.API.Controllers
 
             if (errors.Any())
             {
-
                 foreach (var error in errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
                 return BadRequest(ModelState);
             }
-            return StatusCode(StatusCodes.Status200OK);
+            return StatusCode(StatusCodes.Status200OK, "Registration successful. Welcome to our platform!");
         }
         
         
@@ -50,6 +49,24 @@ namespace StayFinder.API.Controllers
         public async Task<IActionResult> Login ([FromBody] LoginDto loginDto)
         {
             var authResponse = await _authManager.Login(loginDto);
+
+            if (authResponse == null)
+            {
+                return Unauthorized();
+            }
+            return StatusCode(StatusCodes.Status200OK, authResponse);
+        }
+
+        //POST:api/account/refreshtoken
+        [HttpPost]
+        [Route("refreshtoken")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<IActionResult> Refreshtoken([FromBody] AuthResponseDto request) 
+        {
+            var authResponse = await _authManager.VeryifyRefreshToken(request);
 
             if (authResponse == null)
             {

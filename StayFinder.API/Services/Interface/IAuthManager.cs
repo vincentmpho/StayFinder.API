@@ -8,6 +8,6 @@ namespace StayFinder.API.Services.Interface
         Task<IEnumerable<IdentityError>> Register(ApiUserDto userDto);
         Task<AuthResponseDto> Login(LoginDto loginDto);
         Task<string> CreateRefreshToken();
-        Task<AuthResponseDto> VeryifyRefreshToken(AuthResponseDto  request);
+        Task<AuthResponseDto> VeryifyRefreshToken(AuthResponseDto request);
     }
 }

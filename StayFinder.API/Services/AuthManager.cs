@@ -30,26 +30,23 @@ namespace StayFinder.API.Services
 
         public async Task<string> CreateRefreshToken()
         {
-            await _userManager.RemoveAuthenticationTokenAsync(_user, _loginProvider,
-                _refreshToken);
-            var newRefreshToken = await _userManager.GenerateUserTokenAsync(_user, _loginProvider,
-                _refreshToken);
-            var result = await _userManager.SetAuthenticationTokenAsync(_user, _loginProvider,
-                _refreshToken, newRefreshToken);
+            await _userManager.RemoveAuthenticationTokenAsync(_user, _loginProvider, _refreshToken);
+            var newRefreshToken = await _userManager.GenerateUserTokenAsync(_user, _loginProvider,_refreshToken);
+            var result = await _userManager.SetAuthenticationTokenAsync(_user, _loginProvider,_refreshToken, newRefreshToken);
 
             return newRefreshToken;
         }
 
         public async Task<AuthResponseDto> Login(LoginDto loginDto) 
         {
-            _user = await _userManager.FindByEmailAsync(loginDto.Email);
-            var isValidUser = await _userManager.CheckPasswordAsync(_user, loginDto.Password);
+             _user = await _userManager.FindByEmailAsync(loginDto.Email);
+            bool isValidUser = await _userManager.CheckPasswordAsync(_user, loginDto.Password);
 
             if (_user == null || isValidUser == false)
             {
                 return null;
             }
-            var token =await GenerateToken();
+            var token = await GenerateToken();
 
             return new AuthResponseDto
             {
@@ -80,7 +77,7 @@ namespace StayFinder.API.Services
             JwtRegisteredClaimNames.Email)?.Value;
             _user = await _userManager.FindByNameAsync(username);
 
-            if( _user == null)
+            if (_user == null || _user.Id != request.UserId )
             {
                 return null;
             }
@@ -88,7 +85,7 @@ namespace StayFinder.API.Services
             var isValidRefreshToken = await _userManager.VerifyUserTokenAsync(_user, _loginProvider,
                 _refreshToken, request.RefreshToken);
 
-            if ( isValidRefreshToken )
+            if (isValidRefreshToken)
             {
                 var token = await GenerateToken();
                 return new AuthResponseDto
@@ -98,7 +95,8 @@ namespace StayFinder.API.Services
                     RefreshToken = await CreateRefreshToken()
                 };
             }
-             await _userManager.UpdateSecurityStampAsync(_user);
+           await _userManager.UpdateSecurityStampAsync(_user);
+            return null;
         }
 
 

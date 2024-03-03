@@ -33,19 +33,23 @@ builder.Services.AddCors(options =>
 //register User Identity Core
 builder.Services.AddIdentityCore<ApiUser>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<StayFinderDbContext>();
+                .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("StayFinderAPI")
+                .AddEntityFrameworkStores<StayFinderDbContext>()
+                .AddDefaultTokenProviders();
 
 
 //register autoMapper
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
-//Register Repostiory
+// inject  Repostiory
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
+
+//inject Services
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 
-//Register JWT
+//inject JWT
 builder.Services.AddAuthentication(options => { 
    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; //"Bearer"
    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -60,8 +64,10 @@ builder.Services.AddAuthentication(options => {
         ClockSkew = TimeSpan.Zero,
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-        .GetBytes(builder.Configuration["JwtSettings:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSuperSecretKeyWithAtLeast256BitsOrMore"))
+
+
+
     };
 
 });
@@ -93,7 +99,7 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

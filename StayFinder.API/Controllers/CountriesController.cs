@@ -12,7 +12,7 @@ namespace StayFinder.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class CountriesController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -44,7 +44,9 @@ namespace StayFinder.API.Controllers
             return StatusCode(StatusCodes.Status200OK, countryDto);
         }
 
+        //POST : api/Countires
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostCountry([FromBody] CreateCountryDto createCountryDto)
         {
             var country = _mapper.Map<Country>(createCountryDto);
@@ -53,6 +55,7 @@ namespace StayFinder.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutCountry(int id, [FromBody] UpdateCountryDto updateCountryDto)
         {
             if (id != updateCountryDto.Id)
@@ -71,7 +74,9 @@ namespace StayFinder.API.Controllers
             return NoContent();
         }
 
+        //DELETE : api/Countries
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCountry(int id)
         {
             var country = await _countriesRepository.GetAsync(id);
