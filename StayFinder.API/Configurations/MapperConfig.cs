@@ -3,6 +3,7 @@ using StayFinder.API.Models;
 using StayFinder.API.Models.DTOs.Country;
 using StayFinder.API.Models.DTOs.Hotel;
 using StayFinder.API.Models.DTOs.Users;
+using StayFinder.API.Data;
 
 namespace StayFinder.API.Configaration
 {
